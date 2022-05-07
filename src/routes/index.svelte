@@ -31,7 +31,7 @@ const sortBy = (/** @type {string} */ key) => {
     if (key === 'nb_connexions') {
       sortUsers()
     } else {
-      users = users.sort((a,b) => a[key] > b[key] ? 1 : (a[key] < b[key] ? -1 : 0))
+      users = users.sort((/** @type {any} */ a, /** @type {any} */ b) => a[key] > b[key] ? 1 : (a[key] < b[key] ? -1 : 0))
     }
   }
 }
