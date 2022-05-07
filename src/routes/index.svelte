@@ -1,5 +1,5 @@
 <script>
-  import { browser } from '$app/env'
+import { browser } from '$app/env'
 /**
 * @type {import("src/types").User[]}
 */
@@ -40,7 +40,6 @@ getUsers()
 </script>
 
 <h1>BeamMP Users</h1>
-
 <span>{`${(hideGuests ? users.filter(u => !u.guest) : users).length} users loaded.`}</span>
 <button on:click={getUsers}>Refresh</button>
 <input type="checkbox" bind:checked={hideGuests}/> hide guests
@@ -61,6 +60,22 @@ getUsers()
 </table>
 
 <style>
+  table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+
+  tr:nth-child(even) {
+    background-color: #dddddd;
+  }
+
   .selected {
     background-color: darkcyan;
     color: beige;
