@@ -1,4 +1,5 @@
 <script>
+  import { browser } from '$app/env'
 /**
 * @type {import("src/types").User[]}
 */
@@ -10,6 +11,7 @@ let selectedKey = null
 let hideGuests = false
 
 const getUsers = async () => {
+  if (!browser) return
   const res = await fetch('/users.json')
   const _users = await res.json()
   users = _users
@@ -45,13 +47,13 @@ getUsers()
 
 <table>
   <tr>
-    {#each users[0] ? Object.keys(users[0]) : [] as key}
+    {#each users[0] ? (hideGuests ? Object.keys(users[0]).filter(key => key !== 'guest') : Object.keys(users[0])) : [] as key}
     <th on:click={() => sortBy(key)} class:selected={key === selectedKey}>{key}</th>
     {/each}
   </tr>
   {#each hideGuests ? users.filter(u => !u.guest) : users as user}
   <tr>
-    {#each Object.values(user) as value}
+    {#each hideGuests ? Object.entries(user).filter(([key,value]) => key !== 'guest').map(([key,value]) => value) : Object.values(user) as value}
     <td>{value}</td>
     {/each}
   </tr>
