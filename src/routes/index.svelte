@@ -9,13 +9,15 @@ let users = []
 */
 let selectedKey = null
 let hideGuests = false
+let sortUp = false
 
 const getUsers = async () => {
   if (!browser) return
-  const res = await fetch('/users.json')
+  const res = await fetch('/users')
   const _users = await res.json()
-  users = _users
+  users = _users.users
   selectedKey = null
+  sortUp = false
   console.log(`${users.length} users loaded.`)
 }
 
@@ -26,8 +28,10 @@ const sortUsers = () => {
 const sortBy = (/** @type {string} */ key) => {
   if (selectedKey && selectedKey === key) {
     users = users.reverse()
+    sortUp = !sortUp
   } else {
     selectedKey = key
+    sortUp = false
     if (key === 'nb_connexions') {
       sortUsers()
     } else {
@@ -47,7 +51,16 @@ getUsers()
 <table>
   <tr>
     {#each users[0] ? (hideGuests ? Object.keys(users[0]).filter(key => key !== 'guest') : Object.keys(users[0])) : [] as key}
-    <th on:click={() => sortBy(key)} class:selected={key === selectedKey}>{key}</th>
+    <th on:click={() => sortBy(key)} class:selected={key === selectedKey}>
+      {key}
+      {#if key === selectedKey}
+        {#if sortUp}
+          UP
+        {:else}
+          DOWN
+        {/if}
+      {/if}
+    </th>
     {/each}
   </tr>
   {#each hideGuests ? users.filter(u => !u.guest) : users as user}
